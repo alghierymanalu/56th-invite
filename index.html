@@ -11,7 +11,6 @@
 
   .viewport{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
   
-  /* UPDATED: Added city.gif underneath the original gradient colors (converted to 85% opacity rgba) */
   .stage{
     width:1920px;height:1080px;position:relative;
     background: linear-gradient(180deg, rgba(5,4,6,0.85), rgba(17,18,23,0.85)), url('assets/city.gif') center/cover;
@@ -21,7 +20,7 @@
   .hero{position:absolute;top:12%;width:100%;text-align:center}
   .title{font-size:60px;line-height:1.1}
   
-  .tagline{font-family:'Dancing Script',cursive;font-size:36px;margin-top:25px;opacity:0;transition:opacity 0.5s ease;letter-spacing: 2px;}
+  .tagline{font-family:'Dancing Script',cursive;font-size:36px;margin-top:250px;opacity:0;transition:opacity 0.5s ease;letter-spacing: 2px;}
   .tagline.show{opacity:1;}
 
   .controls-wrap{
@@ -71,20 +70,17 @@
 
   .noteOverlay{position:absolute;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center}
   
-  /* UPDATED: Added position:relative so the dog gif anchors to this box */
   .note{position:relative;width:720px;height:420px;background:#fff6d8;border:6px solid #b88e58;border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,0.6);display:flex;gap:18px;padding:20px;transform-origin:center}
   @keyframes note-bounce{0%{transform:scale(0.92);opacity:0}60%{transform:scale(1.04);opacity:1}100%{transform:scale(1);opacity:1}}
   .note.bounce{animation:note-bounce .5s ease forwards}
 
   .text{flex:1;font-family:'Dancing Script',cursive;font-size:28px;color:#3b2f2f;white-space:pre-line}
   
-  /* NEW: Media column to stack the photo and boba */
   .media-col{display:flex;flex-direction:column;align-items:center;gap:16px;}
   
   .photo{width:250px;height:250px;border:4px dashed #b88e58;background:#fff;display:flex;align-items:center;justify-content:center}
   .photo img{width:100%;height:100%;object-fit:cover}
 
-  /* NEW: GIF stylings */
   .boba-gif{width:120px;height:auto;image-rendering:pixelated;}
   .dog-gif{position:absolute;bottom:-15px;left:40px;width:120px;image-rendering:pixelated;z-index:2;}
 
@@ -98,6 +94,26 @@
   .petals{position:absolute;inset:0;pointer-events:none;overflow:visible}
   .petal{position:absolute;width:18px;height:10px;background:#f6c6d6;border-radius:50%;opacity:0.95;transform-origin:center}
   @keyframes fall{0%{transform:translateY(-40px) rotate(0deg);opacity:1}100%{transform:translateY(640px) rotate(360deg);opacity:0}}
+
+  .goodbye-screen {
+    position: absolute;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 84px;
+    color: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.5s ease;
+  }
+  .goodbye-screen.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
 </style>
 </head>
 <body>
@@ -154,6 +170,8 @@
         </div>
       </div>
 
+      <div class="goodbye-screen" id="goodbyeScreen">See you soon!</div>
+
     </div>
   </div>
 
@@ -180,6 +198,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   const noteBox = document.getElementById('noteBox');
   const sparkles = document.getElementById('sparkles');
   const petals = document.getElementById('petals');
+  const goodbyeScreen = document.getElementById('goodbyeScreen'); 
 
   let attempt = 0;
   let zigIndex = 0;
@@ -290,7 +309,13 @@ window.addEventListener('DOMContentLoaded', ()=>{
   });
 
   noteOverlay.addEventListener('click', (e)=>{
-    if(e.target === noteOverlay) noteOverlay.style.display = 'none';
+    if(e.target === noteOverlay) {
+      goodbyeScreen.classList.add('show');
+      
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000); 
+    }
   });
 
 });
