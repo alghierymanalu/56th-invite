@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Invitation - 56th</title>
+<title>It's Cin's Day!</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -172,6 +172,8 @@
 
       <div class="goodbye-screen" id="goodbyeScreen">See you soon!</div>
 
+      <audio id="noteMusic" src="assets/music.mp3" preload="auto"></audio>
+
     </div>
   </div>
 
@@ -199,6 +201,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   const sparkles = document.getElementById('sparkles');
   const petals = document.getElementById('petals');
   const goodbyeScreen = document.getElementById('goodbyeScreen'); 
+  const noteMusic = document.getElementById('noteMusic'); 
 
   let attempt = 0;
   let zigIndex = 0;
@@ -305,6 +308,9 @@ window.addEventListener('DOMContentLoaded', ()=>{
       noteBox.classList.remove('bounce');
       void noteBox.offsetWidth; 
       noteBox.classList.add('bounce');
+      
+      noteMusic.play().catch(e => console.log("Audio play prevented by browser:", e));
+      
     }, 1600);
   });
 
