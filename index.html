@@ -68,9 +68,9 @@
 
   .sprite{image-rendering:pixelated;width:48px;height:96px;display:inline-block}
 
-  .noteOverlay{position:absolute;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center}
+  .noteOverlay{position:absolute;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:100;}
   
-  .note{position:relative;width:720px;height:420px;background:#fff6d8;border:6px solid #b88e58;border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,0.6);display:flex;gap:18px;padding:20px;transform-origin:center}
+  .note{position:relative;width:720px;height:420px;background:#fff6d8;border:6px solid #b88e58;border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,0.6);display:flex;gap:18px;padding:20px;transform-origin:center;z-index:105;}
   @keyframes note-bounce{0%{transform:scale(0.92);opacity:0}60%{transform:scale(1.04);opacity:1}100%{transform:scale(1);opacity:1}}
   .note.bounce{animation:note-bounce .5s ease forwards}
 
@@ -114,6 +114,33 @@
     opacity: 1;
     pointer-events: auto;
   }
+
+  .lyric-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 101; 
+    overflow: hidden;
+  }
+
+  .lyric-pop {
+    position: absolute;
+    font-family: 'Dancing Script', cursive;
+    font-size: 52px;
+    color: #f6c6d6;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+    opacity: 0;
+    transform: scale(0.8) rotate(-5deg);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    max-width: 400px; 
+    white-space: normal; 
+  }
+
+  .lyric-pop.show {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+
 </style>
 </head>
 <body>
@@ -146,6 +173,9 @@
       <div class="petals" id="petals"></div>
 
       <div class="noteOverlay" id="noteOverlay">
+        
+        <div class="lyric-container" id="lyricContainer"></div>
+
         <div class="note" id="noteBox">
           <div class="text">
         Dear Ocin, I like your decision.
@@ -153,7 +183,7 @@
         Plan confirmed:
         – 56
         – questionable billiards skills
-        - and maybe the start of our legendary “happy family” plan,
+        - and maybe the start of our legendary “happy family” plan HAHAHA,
 
         I’ll take care of the rest.
           </div>
@@ -202,6 +232,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   const petals = document.getElementById('petals');
   const goodbyeScreen = document.getElementById('goodbyeScreen'); 
   const noteMusic = document.getElementById('noteMusic'); 
+  const lyricContainer = document.getElementById('lyricContainer'); 
 
   let attempt = 0;
   let zigIndex = 0;
@@ -297,6 +328,73 @@ window.addEventListener('DOMContentLoaded', ()=>{
     }
   }
 
+  function playLyricSequence() {
+
+    const lyrics = [
+      { text: "Constellations of stars", duration: 2000 },
+      { text: "Murals on city walls", duration: 2000 },
+      { text: "I don't see nobody but you", duration: 4000 },
+      { text: "You're my vice, you're my muse", duration: 2000 },
+      { text: "You're a nineteenth floor view", duration: 2000 },
+      { text: "I don't see nobody but you", duration: 4000 } 
+    ];
+
+    let currentLyric = 0;
+
+    function showNextLyric() {
+    if (currentLyric >= lyrics.length) return; 
+
+    const lyricData = lyrics[currentLyric];
+    const el = document.createElement('div');
+    el.className = 'lyric-pop';
+    el.innerText = lyricData.text;
+
+    const noteLeftBoundary = 600;
+    const noteRightBoundary = 1320;
+    const padding = 50; 
+    
+    el.style.maxWidth = "450px"; 
+    el.style.whiteSpace = "normal"; 
+
+    const isLeftSide = Math.random() > 0.5;
+
+    if (isLeftSide) {
+      const xPos = Math.floor(Math.random() * 100) + 50; 
+      el.style.left = xPos + "px";
+      el.style.textAlign = "left";
+    } else {
+      const xPos = Math.floor(Math.random() * 50) + 1370; 
+      el.style.left = xPos + "px";
+      el.style.textAlign = "left";
+    }
+
+    const yPos = Math.floor(Math.random() * 700) + 150;
+    el.style.top = yPos + "px";
+
+    lyricContainer.appendChild(el);
+
+    el.style.opacity = "0";
+    el.style.transform = `scale(0.8) rotate(${Math.random() * 20 - 10}deg)`;
+
+    setTimeout(() => {
+      el.style.opacity = "1";
+      el.style.transform = `scale(1) rotate(0deg)`;
+      el.classList.add('show');
+    }, 50);
+
+    setTimeout(() => {
+      el.style.opacity = "0";
+      setTimeout(() => el.remove(), 500); 
+      
+      currentLyric++;
+      showNextLyric();
+    }, lyricData.duration);
+  }
+
+    showNextLyric();
+  }
+
+
   yesBtn.addEventListener('click', ()=>{
     playSparkles();
     peonyScene.style.display = 'flex';
@@ -311,6 +409,8 @@ window.addEventListener('DOMContentLoaded', ()=>{
       
       noteMusic.play().catch(e => console.log("Audio play prevented by browser:", e));
       
+      playLyricSequence();
+
     }, 1600);
   });
 
