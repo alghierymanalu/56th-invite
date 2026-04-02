@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>2026 Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#0a0a0a;cursor:pointer;}
+
+  .viewport{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  
+  /* UPDATED: Added initial opacity and transition for the fade-in effect */
+  .stage{
+    width:1920px;height:1080px;position:relative;
+    background: linear-gradient(180deg, rgba(5,4,6,0.85), rgba(17,18,23,0.85)), url('assets/city.gif') center/cover;
+    border:6px solid #111;color:#fff;font-family:'Dancing Script',cursive;overflow:hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 1.5s ease; /* Smooth transition */
+  }
+
+  /* Trigger class for fade-in */
+  .stage.visible {
+    opacity: 1;
+  }
+
+  .title {
+    font-size: 80px;
+    margin-bottom: 150px; /* Space for the bracket */
+    color: #f6c6d6;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+    z-index: 10;
+  }
+
+  /* --- TIMELINE SPECIFICS --- */
+  .timeline-wrapper {
+    width: 85%;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    height: 500px; 
+  }
+
+  /* The actual horizontal line */
+  .timeline-line {
+    position: absolute;
+    height: 6px;
+    background: #fff;
+    width: 100%;
+    top: 20px; 
+    z-index: 1;
+    box-shadow: 0 0 10px rgba(255,255,255,0.3);
+  }
+
+  /* THE IMAGE BRACKET */
+  .timeline-bracket {
+    position: absolute;
+    top: -40px; /* Above the timeline */
+    left: 350px; /* Centers exactly over the first dot */
+    right: 350px; /* Centers exactly over the last dot */
+    height: 30px;
+    border: 4px solid #fff;
+    border-bottom: none; /* Creates the top bracket shape [ ] turned 90deg */
+    z-index: 1;
+  }
+  .bracket-text {
+    position: absolute;
+    top: -45px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffffff;
+    font-size: 32px;
+    white-space: nowrap;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+  }
+
+  /* The container for each stop on the line */
+  .milestone {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 450px; 
+  }
+
+  .dot {
+    width: 46px;
+    height: 46px;
+    background: #1dbf7a;
+    border: 6px solid #fff;
+    border-radius: 50%;
+    margin-bottom: 30px;
+    box-shadow: 0 0 20px rgba(29, 191, 122, 0.6);
+  }
+
+  .milestone-content {
+    position: absolute;
+    top: 40px;
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .caption { 
+    font-family: 'Press Start 2P', monospace;
+    font-size: 24px; 
+    color: #1dbf7a; 
+    margin-bottom: 25px; 
+  }
+
+  .flavor { 
+    font-size: 32px; 
+    color: #fce8ef; 
+    line-height: 1.3; 
+    text-align: center;
+    margin: 15px 0;
+  }
+
+  /* Image specifications */
+  .img-container { position: relative; } /* Wrapper to anchor tilted texts */
+
+  .milestone-img-small {
+    width: 150px;
+    height: 250px;
+    border: 4px solid #fff;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .milestone-img-nov {
+    width: 200px;
+    height: 400px;
+    border: 4px solid #fff;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .milestone-img-large {
+    width: 400px;
+    height: 200px;
+    border: 4px solid #fff;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  /* TILTED FLOATING TEXT AROUND IMAGES */
+  .floating-text {
+    position: absolute;
+    font-family: 'Dancing Script', cursive;
+    font-size: 30px;
+    color: #fce8ef;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+    z-index: 10;
+    white-space: nowrap;
+  }
+  
+  /* Adjust these placements as needed for your specific flavor texts */
+  .tilt-1 { top: 20px; left: -120px; transform: rotate(-15deg); }
+  .tilt-2 { bottom: 40px; right: -120px; transform: rotate(20deg); color: #1dbf7a;}
+  .tilt-3 { top: -20px; left: -60px; transform: rotate(-25deg); }
+  .tilt-4 { bottom: -5px; right: -70px; transform: rotate(15deg); color: #bf3a4a;}
+  .tilt-5 { top: 50px; left: -140px; transform: rotate(-10deg); color: #1dbf7a;}
+  .tilt-6 { bottom: 30px; right: -130px; transform: rotate(12deg); }
+
+  /* --- GOODBYE OVERLAY --- */
+  .goodbye-screen {
+    position: absolute;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 100px;
+    color: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.5s ease;
+  }
+  .goodbye-screen.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+</style>
+</head>
+<body>
+  <div class="viewport">
+    <div class="stage" id="stage">
+
+      <audio id="roadmapMusic" src="assets/roadmap_music.mp3" loop preload="auto"></audio>
+
+      <div class="title">2026's Roadmap</div>
+      
+      <div class="timeline-wrapper">
+        <div class="timeline-line"></div>
+        
+        <div class="timeline-bracket">
+            <div class="bracket-text">isi suka suka kita aja 👀</div>
+        </div>
+
+        <div class="milestone">
+          <div class="dot"></div>
+          <div class="milestone-content">
+            <br>
+            <span class="caption">MAY</span>
+
+            <div class="img-container">
+              <span class="floating-text tilt-1">Daniel!</span>
+              <img src="assets/may-small.jpg" class="milestone-img-small" alt="May Small">
+              <span class="floating-text tilt-2">Let's go?</span>
+            </div>
+
+            <span class="flavor">First Playlist!</span>
+
+            <div class="img-container">
+              <span class="floating-text tilt-3">Booked!</span>
+              <img src="assets/may-large.jpg" class="milestone-img-large" alt="May Large">
+              <span class="floating-text tilt-4">Music Soul-mates!</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="milestone">
+           <div class="dot"></div>
+           <div class="milestone-content">
+            <br>
+            <span class="caption">AUGUST</span>
+           </div>
+        </div>
+
+        <div class="milestone">
+          <div class="dot"></div>
+          <div class="milestone-content">
+            <br>
+            <span class="caption">NOVEMBER</span>
+            
+            <div class="img-container">
+              <span class="floating-text tilt-5">Sagi Month!</span>
+              <img src="assets/nov-small.jpg" class="milestone-img-nov" alt="Nov Small">
+              <span class="floating-text tilt-6">Rumor confirmed?</span>
+            </div>
+
+            <span class="flavor">
+              Don't know if you like Kendrick<br>
+              But this shouldn't be missed!<br>
+              On your month!
+            </span>
+          </div>
+        </div>
+        
+      </div>
+
+      <div class="goodbye-screen" id="goodbyeScreen">See you soon!</div>
+
+    </div>
+  </div>
+
+<script>
+window.addEventListener('DOMContentLoaded', ()=>{
+
+  const stage = document.getElementById('stage');
+  const goodbyeScreen = document.getElementById('goodbyeScreen'); 
+  const music = document.getElementById('roadmapMusic');
+
+  // Keeps the scaling logic
+  function fitStage(){
+    const viewportW = window.innerWidth;
+    const viewportH = window.innerHeight;
+    const scale = Math.min(viewportW/1920, viewportH/1080);
+    stage.style.transform = 'scale(' + scale + ')';
+    stage.style.transformOrigin = 'center';
+  }
+  window.addEventListener('resize', fitStage);
+  fitStage();
+
+  // NEW: Trigger the fade-in effect as soon as the DOM is ready
+  setTimeout(() => {
+    stage.classList.add('visible');
+  }, 100);
+
+  // Clicking anywhere on this page triggers the end sequence
+
+  const playMusic = () => {
+    music.play().catch(() => {
+        console.log("Autoplay blocked. Waiting for user interaction...");
+    });
+  };
+
+  playMusic();
+  
+  stage.addEventListener('click', () => {
+    // Safety check: if music hasn't started yet, start it now
+    if (music.paused) {
+        music.play();
+    }
+
+    // Trigger goodbye sequence
+    goodbyeScreen.classList.add('show');
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 3000);
+  }, { once: true }); // Ensure this click listener only runs once
+
+});
+</script>
+</body>
+</html>

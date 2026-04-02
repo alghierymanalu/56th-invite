@@ -17,10 +17,10 @@
     border:6px solid #111;color:#fff;font-family:'Press Start 2P',monospace;overflow:hidden
   }
 
-  .hero{position:absolute;top:12%;width:100%;text-align:center}
-  .title{font-size:60px;line-height:1.1}
+  .hero{position:absolute;top:12%;width:100%;text-align:center;pointer-events:none;}
+  .title{font-size:60px;line-height:1.1;pointer-events:auto;}
   
-  .tagline{font-family:'Dancing Script',cursive;font-size:36px;margin-top:250px;opacity:0;transition:opacity 0.5s ease;letter-spacing: 2px;}
+  .tagline{font-family:'Dancing Script',cursive;font-size:36px;margin-top:250px;opacity:0;transition:opacity 0.5s ease;letter-spacing: 2px;pointer-events:none;}
   .tagline.show{opacity:1;}
 
   .controls-wrap{
@@ -29,7 +29,8 @@
     bottom:120px;            
     transform:translateX(-50%);
     width: auto;
-    pointer-events: none;    
+    pointer-events: none;
+    z-index: 999;
   }
 
   .controls{
@@ -41,6 +42,9 @@
   }
 
   .btn{
+    position:relative; 
+    z-index: 999;      
+    pointer-events: auto;
     display:inline-flex;
     width:240px;height:80px;border-radius:12px;
     align-items:center;justify-content:center;
@@ -52,6 +56,13 @@
   @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.07)}100%{transform:scale(1)}}
   .animated{animation:pulse 1s infinite}
 
+  /* NEW: Custom centered pulse for the Roadmap Button */
+  @keyframes pulse-center {
+    0% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.07); }
+    100% { transform: translateX(-50%) scale(1); }
+  }
+
   @keyframes desperate-bounce{
     0%, 100% {transform: scale(1.4) translateY(0);}
     50% {transform: scale(1.4) translateY(-15px);}
@@ -60,17 +71,17 @@
     animation: desperate-bounce 0.4s ease-in-out infinite !important;
     box-shadow: 0 0 30px rgba(29, 191, 122, 0.6);
     border-color: #2ed68d;
-    z-index: 10;
+    z-index: 1000 !important; 
   }
 
   .yes{background:linear-gradient(180deg,#1dbf7a,#11985a);border-color:#1b8b5a}
   .no{background:linear-gradient(180deg,#bf3a4a,#9b1b24);border-color:#8b1b1b}
 
-  .sprite{image-rendering:pixelated;width:48px;height:96px;display:inline-block}
+  .sprite{image-rendering:pixelated;width:48px;height:96px;display:inline-block;pointer-events:none;}
 
-  .noteOverlay{position:absolute;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:100;}
+  .noteOverlay{position:absolute;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000;}
   
-  .note{position:relative;width:720px;height:420px;background:#fff6d8;border:6px solid #b88e58;border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,0.6);display:flex;gap:18px;padding:20px;transform-origin:center;z-index:105;}
+  .note{position:relative;width:720px;height:420px;background:#fff6d8;border:6px solid #b88e58;border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,0.6);display:flex;gap:18px;padding:20px;transform-origin:center;z-index:2005;pointer-events:auto;}
   @keyframes note-bounce{0%{transform:scale(0.92);opacity:0}60%{transform:scale(1.04);opacity:1}100%{transform:scale(1);opacity:1}}
   .note.bounce{animation:note-bounce .5s ease forwards}
 
@@ -82,44 +93,24 @@
   .photo img{width:100%;height:100%;object-fit:cover}
 
   .boba-gif{width:120px;height:auto;image-rendering:pixelated;}
-  .dog-gif{position:absolute;bottom:-15px;left:40px;width:120px;image-rendering:pixelated;z-index:2;}
+  .dog-gif{position:absolute;bottom:-15px;left:40px;width:120px;image-rendering:pixelated;z-index:2;pointer-events:none;}
 
-  .peonyScene{position:absolute;inset:0;display:none;align-items:center;justify-content:center;pointer-events:none}
+  .peonyScene{position:absolute;inset:0;display:none;align-items:center;justify-content:center;pointer-events:none;z-index:50;}
   .peonyScene img{max-width:500px;filter:drop-shadow(0 10px 30px rgba(0,0,0,0.45))}
 
-  .sparkles{position:absolute;inset:0;pointer-events:none;overflow:visible}
+  .sparkles{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:60;}
   .spark{position:absolute;width:6px;height:6px;background:#fff;border-radius:1px;filter:drop-shadow(0 0 6px rgba(255,255,255,0.9));opacity:0}
   @keyframes sparkle-move{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}
 
-  .petals{position:absolute;inset:0;pointer-events:none;overflow:visible}
+  .petals{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:70;}
   .petal{position:absolute;width:18px;height:10px;background:#f6c6d6;border-radius:50%;opacity:0.95;transform-origin:center}
   @keyframes fall{0%{transform:translateY(-40px) rotate(0deg);opacity:1}100%{transform:translateY(640px) rotate(360deg);opacity:0}}
-
-  .goodbye-screen {
-    position: absolute;
-    inset: 0;
-    background: #000;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Dancing Script', cursive;
-    font-size: 84px;
-    color: #fff;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 1.5s ease;
-  }
-  .goodbye-screen.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
 
   .lyric-container {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: 101; 
+    z-index: 2001; 
     overflow: hidden;
   }
 
@@ -141,6 +132,31 @@
     transform: scale(1) rotate(0deg);
   }
 
+  /* ROADMAP BUTTON */
+  #roadmapBtn {
+    display: none;
+    opacity: 0;
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%); /* Start centered */
+    z-index: 2110;
+    background: #1dbf7a;
+    border: 4px solid #fff;
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 16px;
+    cursor: pointer;
+    transition: opacity 1s ease;
+    pointer-events: auto;
+  }
+  #roadmapBtn.visible {
+    opacity: 1;
+    animation: pulse-center 1s infinite; /* Keeps it centered while bouncing! */
+  }
+
 </style>
 </head>
 <body>
@@ -152,30 +168,24 @@
         <div class="tagline" id="tagline">No, No, Please Stop!</div>
       </div>
 
-      <div class="controls-wrap" id="controlsWrap">
-        <div class="controls" id="controls">
-
-          <img src="assets/sprite1.gif" class="sprite" alt="sprite1">
-
-          <div class="btn yes animated" id="yesBtn" role="button" tabindex="0">YES</div>
-          <div class="btn no animated" id="noBtn" role="button" tabindex="0">NO</div>
-
-          <img src="assets/sprite2.gif" class="sprite" alt="sprite2">
-
-        </div>
-      </div>
-
       <div class="peonyScene" id="peonyScene">
         <img src="assets/peony.gif" id="peonyGif" alt="peony">
       </div>
-
       <div class="sparkles" id="sparkles"></div>
       <div class="petals" id="petals"></div>
 
-      <div class="noteOverlay" id="noteOverlay">
-        
-        <div class="lyric-container" id="lyricContainer"></div>
+      <div class="controls-wrap" id="controlsWrap">
+        <div class="controls" id="controls">
+          <img src="assets/sprite1.gif" class="sprite" alt="sprite1">
+          <div class="btn yes animated" id="yesBtn" role="button" tabindex="0">YES</div>
+          <div class="btn no animated" id="noBtn" role="button" tabindex="0">NO</div>
+          <img src="assets/sprite2.gif" class="sprite" alt="sprite2">
+        </div>
+      </div>
 
+      <div class="noteOverlay" id="noteOverlay">
+        <div class="lyric-container" id="lyricContainer"></div>
+        
         <div class="note" id="noteBox">
           <div class="text">
         Dear Ocin, I like your decision.
@@ -196,11 +206,10 @@
           </div>
           
           <img src="assets/dog.gif" alt="dog" class="dog-gif">
-
         </div>
-      </div>
 
-      <div class="goodbye-screen" id="goodbyeScreen">See you soon!</div>
+        <div id="roadmapBtn">SHOW ROADMAP</div>
+      </div>
 
       <audio id="noteMusic" src="assets/music.mp3" preload="auto"></audio>
 
@@ -230,9 +239,9 @@ window.addEventListener('DOMContentLoaded', ()=>{
   const noteBox = document.getElementById('noteBox');
   const sparkles = document.getElementById('sparkles');
   const petals = document.getElementById('petals');
-  const goodbyeScreen = document.getElementById('goodbyeScreen'); 
   const noteMusic = document.getElementById('noteMusic'); 
   const lyricContainer = document.getElementById('lyricContainer'); 
+  const roadmapBtn = document.getElementById('roadmapBtn');
 
   let attempt = 0;
   let zigIndex = 0;
@@ -246,6 +255,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   ];
 
   noBtn.addEventListener('click', (ev) => {
+    ev.preventDefault();
     ev.stopPropagation();
     
     noBtn.classList.remove('animated'); 
@@ -290,7 +300,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
     }
   });
 
-  
   function playSparkles(){
     const stageRect = stage.getBoundingClientRect();
     const yesRect = yesBtn.getBoundingClientRect();
@@ -329,7 +338,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
   }
 
   function playLyricSequence() {
-
     const lyrics = [
       { text: "Constellations of stars", duration: 2000 },
       { text: "Murals on city walls", duration: 2000 },
@@ -342,60 +350,52 @@ window.addEventListener('DOMContentLoaded', ()=>{
     let currentLyric = 0;
 
     function showNextLyric() {
-    if (currentLyric >= lyrics.length) return; 
+      if (currentLyric >= lyrics.length) return; 
 
-    const lyricData = lyrics[currentLyric];
-    const el = document.createElement('div');
-    el.className = 'lyric-pop';
-    el.innerText = lyricData.text;
+      const lyricData = lyrics[currentLyric];
+      const el = document.createElement('div');
+      el.className = 'lyric-pop';
+      el.innerText = lyricData.text;
 
-    const noteLeftBoundary = 600;
-    const noteRightBoundary = 1320;
-    const padding = 50; 
-    
-    el.style.maxWidth = "450px"; 
-    el.style.whiteSpace = "normal"; 
+      const isLeftSide = Math.random() > 0.5;
+      if (isLeftSide) {
+        const xPos = Math.floor(Math.random() * 100) + 50; 
+        el.style.left = xPos + "px";
+        el.style.textAlign = "left";
+      } else {
+        const xPos = Math.floor(Math.random() * 50) + 1370; 
+        el.style.left = xPos + "px";
+        el.style.textAlign = "left";
+      }
 
-    const isLeftSide = Math.random() > 0.5;
+      const yPos = Math.floor(Math.random() * 700) + 150;
+      el.style.top = yPos + "px";
 
-    if (isLeftSide) {
-      const xPos = Math.floor(Math.random() * 100) + 50; 
-      el.style.left = xPos + "px";
-      el.style.textAlign = "left";
-    } else {
-      const xPos = Math.floor(Math.random() * 50) + 1370; 
-      el.style.left = xPos + "px";
-      el.style.textAlign = "left";
-    }
+      lyricContainer.appendChild(el);
 
-    const yPos = Math.floor(Math.random() * 700) + 150;
-    el.style.top = yPos + "px";
-
-    lyricContainer.appendChild(el);
-
-    el.style.opacity = "0";
-    el.style.transform = `scale(0.8) rotate(${Math.random() * 20 - 10}deg)`;
-
-    setTimeout(() => {
-      el.style.opacity = "1";
-      el.style.transform = `scale(1) rotate(0deg)`;
-      el.classList.add('show');
-    }, 50);
-
-    setTimeout(() => {
       el.style.opacity = "0";
-      setTimeout(() => el.remove(), 500); 
-      
-      currentLyric++;
-      showNextLyric();
-    }, lyricData.duration);
-  }
+      el.style.transform = `scale(0.8) rotate(${Math.random() * 20 - 10}deg)`;
+
+      setTimeout(() => {
+        el.style.opacity = "1";
+        el.style.transform = `scale(1) rotate(0deg)`;
+        el.classList.add('show');
+      }, 50);
+
+      setTimeout(() => {
+        el.style.opacity = "0";
+        setTimeout(() => el.remove(), 500); 
+        currentLyric++;
+        showNextLyric();
+      }, lyricData.duration);
+    }
 
     showNextLyric();
   }
 
-
-  yesBtn.addEventListener('click', ()=>{
+  yesBtn.addEventListener('click', (ev)=>{
+    ev.preventDefault();
+    ev.stopPropagation(); 
     playSparkles();
     peonyScene.style.display = 'flex';
     playPetals();
@@ -411,17 +411,20 @@ window.addEventListener('DOMContentLoaded', ()=>{
       
       playLyricSequence();
 
+      // Fade in the Roadmap button 2 seconds after the note opens
+      setTimeout(() => {
+        roadmapBtn.style.display = 'block';
+        setTimeout(() => {
+          roadmapBtn.classList.add('visible');
+        }, 50); 
+      }, 2000);
+
     }, 1600);
   });
 
-  noteOverlay.addEventListener('click', (e)=>{
-    if(e.target === noteOverlay) {
-      goodbyeScreen.classList.add('show');
-      
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000); 
-    }
+  roadmapBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    window.location.href = "roadmap.html";
   });
 
 });
