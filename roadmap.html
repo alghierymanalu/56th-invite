@@ -268,11 +268,12 @@ window.addEventListener('DOMContentLoaded', ()=>{
   function fitStage(){
     const viewportW = window.innerWidth;
     const viewportH = window.innerHeight;
-    const scale = Math.min(viewportW/1920, viewportH/1080);
-    stage.style.transform = 'scale(' + scale + ')';
-    stage.style.transformOrigin = 'center';
+    const scale = Math.min(viewportW / 1920, viewportH / 1080);
+    stage.style.transform = `scale(${scale})`;
+    stage.style.transformOrigin = 'center center';
   }
   window.addEventListener('resize', fitStage);
+  window.addEventListener('load', fitStage);
   fitStage();
 
   setTimeout(() => {

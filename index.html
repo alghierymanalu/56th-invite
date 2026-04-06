@@ -2,19 +2,33 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
 <title>It's Cin's Day!</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;background:#0a0a0a}
+  html,body{height:100%;width:100%;background:#0a0a0a;overflow:hidden;position:fixed;}
 
-  .viewport{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .viewport{
+    width:100vw;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#0a0a0a;
+  }
   
   .stage{
-    width:1920px;height:1080px;position:relative;
+    width:1920px;
+    height:1080px;
+    position:relative;
     background: linear-gradient(180deg, rgba(5,4,6,0.85), rgba(17,18,23,0.85)), url('assets/city.gif') center/cover;
-    border:6px solid #111;color:#fff;font-family:'Press Start 2P',monospace;overflow:hidden
+    border:6px solid #111;
+    color:#fff;
+    font-family:'Press Start 2P',monospace;
+    overflow:hidden;
+    flex-shrink: 0; 
+    will-change: transform; 
   }
 
   .hero{position:absolute;top:12%;width:100%;text-align:center;pointer-events:none;}
@@ -85,9 +99,7 @@
   .note.bounce{animation:note-bounce .5s ease forwards}
 
   .text{flex:1;font-family:'Dancing Script',cursive;font-size:28px;color:#3b2f2f;white-space:pre-line}
-  
   .media-col{display:flex;flex-direction:column;align-items:center;gap:16px;}
-  
   .photo{width:250px;height:250px;border:4px dashed #b88e58;background:#fff;display:flex;align-items:center;justify-content:center}
   .photo img{width:100%;height:100%;object-fit:cover}
 
@@ -217,18 +229,20 @@
 <script>
 window.addEventListener('DOMContentLoaded', ()=>{
 
+  const stage = document.getElementById('stage');
+
   function fitStage(){
     const viewportW = window.innerWidth;
     const viewportH = window.innerHeight;
-    const stage = document.getElementById('stage');
-    const scale = Math.min(viewportW/1920, viewportH/1080);
-    stage.style.transform = 'scale(' + scale + ')';
-    stage.style.transformOrigin = 'center';
+    const scale = Math.min(viewportW / 1920, viewportH / 1080);
+    stage.style.transform = `scale(${scale})`;
+    stage.style.transformOrigin = 'center center';
   }
+  
   window.addEventListener('resize', fitStage);
+  window.addEventListener('load', fitStage);
   fitStage();
 
-  const stage = document.getElementById('stage');
   const yesBtn = document.getElementById('yesBtn');
   const noBtn  = document.getElementById('noBtn');
   const tagline = document.getElementById('tagline'); 
@@ -245,27 +259,17 @@ window.addEventListener('DOMContentLoaded', ()=>{
   let zigIndex = 0;
 
   const zigzagPattern = [
-    { x: -600, y: -400 }, 
-    { x: -600, y: 100 },  
-    { x: 600,  y: -400 }, 
-    { x: 600,  y: 100 },  
-    { x: 0,    y: 0 }     
+    { x: -600, y: -400 }, { x: -600, y: 100 },  
+    { x: 600,  y: -400 }, { x: 600,  y: 100 }, { x: 0, y: 0 }     
   ];
 
   noBtn.addEventListener('click', (ev) => {
     ev.preventDefault();
     ev.stopPropagation();
-    
     noBtn.classList.remove('animated'); 
-    
     if (attempt < 4) attempt++;
-
-    if (attempt === 1) {
-      noBtn.style.transform = `translate(-180px, 0px) scale(1)`;
-    } 
-    else if (attempt === 2) {
-      noBtn.style.transform = `translate(500px, -300px) scale(1)`;
-    } 
+    if (attempt === 1) noBtn.style.transform = `translate(-180px, 0px) scale(1)`;
+    else if (attempt === 2) noBtn.style.transform = `translate(500px, -300px) scale(1)`;
     else if (attempt === 3) {
       noBtn.style.transform = `translate(300px, -150px) scale(0.5)`;
       noBtn.innerText = "NO"; 
@@ -275,18 +279,13 @@ window.addEventListener('DOMContentLoaded', ()=>{
   noBtn.addEventListener('mouseenter', () => {
     if (attempt >= 3) {
       attempt = 4; 
-      
       yesBtn.classList.remove('animated');
       yesBtn.classList.add('desperate');
       tagline.classList.add('show');
-      
       const pos = zigzagPattern[zigIndex];
       noBtn.style.transform = `translate(${pos.x}px, ${pos.y}px) scale(0.5)`;
-      
       zigIndex++;
-      if (zigIndex >= zigzagPattern.length) {
-        zigIndex = 0; 
-      }
+      if (zigIndex >= zigzagPattern.length) zigIndex = 0; 
     }
   });
 
@@ -301,8 +300,9 @@ window.addEventListener('DOMContentLoaded', ()=>{
   function playSparkles(){
     const stageRect = stage.getBoundingClientRect();
     const yesRect = yesBtn.getBoundingClientRect();
-    const baseLeft = yesRect.left + yesRect.width/2 - stageRect.left;
-    const baseTop  = yesRect.top  + yesRect.height/2 - stageRect.top;
+    const scale = stage.getBoundingClientRect().width / 1920; 
+    const baseLeft = (yesRect.left - stageRect.left) / scale + (yesRect.width / scale / 2);
+    const baseTop  = (yesRect.top - stageRect.top) / scale + (yesRect.height / scale / 2);
 
     for(let i=0;i<15;i++){
       const s = document.createElement('div');
@@ -320,11 +320,10 @@ window.addEventListener('DOMContentLoaded', ()=>{
   }
 
   function playPetals(){
-    const stageW = stage.clientWidth;
     for(let i=0;i<12;i++){
       const p = document.createElement('div');
       p.className = 'petal';
-      const startX = (stageW/2) + (Math.random()*400 - 200);
+      const startX = (1920/2) + (Math.random()*400 - 200);
       p.style.left = startX + 'px';
       p.style.top = '-40px';
       const dur = 1.4 + Math.random()*1.5;
@@ -365,15 +364,10 @@ window.addEventListener('DOMContentLoaded', ()=>{
         el.style.left = xPos + "px";
         el.style.textAlign = "left";
       }
-
-      const yPos = Math.floor(Math.random() * 700) + 150;
-      el.style.top = yPos + "px";
-
+      el.style.top = Math.floor(Math.random() * 700) + 150 + "px";
       lyricContainer.appendChild(el);
-
       el.style.opacity = "0";
       el.style.transform = `scale(0.8) rotate(${Math.random() * 20 - 10}deg)`;
-
       setTimeout(() => {
         el.style.opacity = "1";
         el.style.transform = `scale(1) rotate(0deg)`;
@@ -387,7 +381,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
         showNextLyric();
       }, lyricData.duration);
     }
-
     showNextLyric();
   }
 
@@ -404,18 +397,12 @@ window.addEventListener('DOMContentLoaded', ()=>{
       noteBox.classList.remove('bounce');
       void noteBox.offsetWidth; 
       noteBox.classList.add('bounce');
-      
-      noteMusic.play().catch(e => console.log("Audio play prevented by browser:", e));
-      
+      noteMusic.play().catch(e => console.log("Audio play prevented", e));
       playLyricSequence();
-
       setTimeout(() => {
         roadmapBtn.style.display = 'block';
-        setTimeout(() => {
-          roadmapBtn.classList.add('visible');
-        }, 50); 
+        setTimeout(() => { roadmapBtn.classList.add('visible'); }, 50); 
       }, 4000);
-
     }, 1600);
   });
 
@@ -423,7 +410,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
     e.stopPropagation();
     window.location.href = "roadmap.html";
   });
-
 });
 </script>
 </body>
