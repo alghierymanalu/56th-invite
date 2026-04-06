@@ -4,14 +4,13 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>2026 Roadmap</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Dancing+Script:wght@400;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%;background:#0a0a0a;cursor:pointer;}
 
   .viewport{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
   
-  /* UPDATED: Added initial opacity and transition for the fade-in effect */
   .stage{
     width:1920px;height:1080px;position:relative;
     background: linear-gradient(180deg, rgba(5,4,6,0.85), rgba(17,18,23,0.85)), url('assets/city.gif') center/cover;
@@ -20,24 +19,22 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    opacity: 0; /* Hidden by default */
-    transition: opacity 1.5s ease; /* Smooth transition */
+    opacity: 0; 
+    transition: opacity 1.5s ease; 
   }
 
-  /* Trigger class for fade-in */
   .stage.visible {
     opacity: 1;
   }
 
   .title {
     font-size: 80px;
-    margin-bottom: 150px; /* Space for the bracket */
+    margin-bottom: 150px; 
     color: #f6c6d6;
     text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
     z-index: 10;
   }
 
-  /* --- TIMELINE SPECIFICS --- */
   .timeline-wrapper {
     width: 85%;
     position: relative;
@@ -47,7 +44,6 @@
     height: 500px; 
   }
 
-  /* The actual horizontal line */
   .timeline-line {
     position: absolute;
     height: 6px;
@@ -58,19 +54,19 @@
     box-shadow: 0 0 10px rgba(255,255,255,0.3);
   }
 
-  /* THE IMAGE BRACKET */
   .timeline-bracket {
     position: absolute;
-    top: -40px; /* Above the timeline */
-    left: 350px; /* Centers exactly over the first dot */
-    right: 350px; /* Centers exactly over the last dot */
+    top: -40px; 
+    left: 350px; 
+    right: 350px; 
     height: 30px;
     border: 4px solid #fff;
-    border-bottom: none; /* Creates the top bracket shape [ ] turned 90deg */
+    border-bottom: none; 
     z-index: 1;
   }
   .bracket-text {
     position: absolute;
+    font-family: 'Caveat', cursive;
     top: -45px;
     left: 50%;
     transform: translateX(-50%);
@@ -80,7 +76,6 @@
     text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
   }
 
-  /* The container for each stop on the line */
   .milestone {
     position: relative;
     z-index: 2;
@@ -118,15 +113,15 @@
   }
 
   .flavor { 
-    font-size: 32px; 
+    font-size: 32px;
+    font-family: 'Caveat', cursive; 
     color: #fce8ef; 
     line-height: 1.3; 
     text-align: center;
     margin: 15px 0;
   }
 
-  /* Image specifications */
-  .img-container { position: relative; } /* Wrapper to anchor tilted texts */
+  .img-container { position: relative; } 
 
   .milestone-img-small {
     width: 150px;
@@ -152,10 +147,9 @@
     border-radius: 8px;
   }
 
-  /* TILTED FLOATING TEXT AROUND IMAGES */
   .floating-text {
     position: absolute;
-    font-family: 'Dancing Script', cursive;
+    font-family: 'Caveat', cursive;
     font-size: 30px;
     color: #fce8ef;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
@@ -163,15 +157,13 @@
     white-space: nowrap;
   }
   
-  /* Adjust these placements as needed for your specific flavor texts */
   .tilt-1 { top: 20px; left: -120px; transform: rotate(-15deg); }
-  .tilt-2 { bottom: 40px; right: -120px; transform: rotate(20deg); color: #1dbf7a;}
+  .tilt-2 { bottom: 40px; right: -120px; transform: rotate(20deg); color: #fce8ef;}
   .tilt-3 { top: -20px; left: -60px; transform: rotate(-25deg); }
-  .tilt-4 { bottom: -5px; right: -70px; transform: rotate(15deg); color: #bf3a4a;}
+  .tilt-4 { bottom: -5px; right: -70px; transform: rotate(15deg); color: #1dbf7a;}
   .tilt-5 { top: 50px; left: -140px; transform: rotate(-10deg); color: #1dbf7a;}
   .tilt-6 { bottom: 30px; right: -130px; transform: rotate(12deg); }
 
-  /* --- GOODBYE OVERLAY --- */
   .goodbye-screen {
     position: absolute;
     inset: 0;
@@ -206,7 +198,7 @@
         <div class="timeline-line"></div>
         
         <div class="timeline-bracket">
-            <div class="bracket-text">isi suka suka kita aja 👀</div>
+            <div class="bracket-text">isi suka suka, who knows?</div>
         </div>
 
         <div class="milestone">
@@ -273,7 +265,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
   const goodbyeScreen = document.getElementById('goodbyeScreen'); 
   const music = document.getElementById('roadmapMusic');
 
-  // Keeps the scaling logic
   function fitStage(){
     const viewportW = window.innerWidth;
     const viewportH = window.innerHeight;
@@ -284,12 +275,10 @@ window.addEventListener('DOMContentLoaded', ()=>{
   window.addEventListener('resize', fitStage);
   fitStage();
 
-  // NEW: Trigger the fade-in effect as soon as the DOM is ready
   setTimeout(() => {
     stage.classList.add('visible');
   }, 100);
 
-  // Clicking anywhere on this page triggers the end sequence
 
   const playMusic = () => {
     music.play().catch(() => {
@@ -300,17 +289,15 @@ window.addEventListener('DOMContentLoaded', ()=>{
   playMusic();
   
   stage.addEventListener('click', () => {
-    // Safety check: if music hasn't started yet, start it now
     if (music.paused) {
         music.play();
     }
 
-    // Trigger goodbye sequence
     goodbyeScreen.classList.add('show');
     setTimeout(() => {
       window.location.href = 'index.html';
     }, 3000);
-  }, { once: true }); // Ensure this click listener only runs once
+  }, { once: true }); 
 
 });
 </script>
