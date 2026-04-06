@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Dancing+Script:wght@400;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;background:#0a0a0a;cursor:pointer;}
+  html,body{height:100%;width:100%;background:#0a0a0a;overflow:hidden;position:fixed;}
 
   .viewport{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
   
@@ -21,6 +21,8 @@
     justify-content: center;
     opacity: 0; 
     transition: opacity 1.5s ease; 
+    flex-shrink: 0; 
+    will-change: transform;
   }
 
   .stage.visible {
@@ -272,6 +274,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
     stage.style.transform = `scale(${scale})`;
     stage.style.transformOrigin = 'center center';
   }
+  
   window.addEventListener('resize', fitStage);
   window.addEventListener('load', fitStage);
   fitStage();
@@ -304,3 +307,4 @@ window.addEventListener('DOMContentLoaded', ()=>{
 </script>
 </body>
 </html>
+
