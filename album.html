@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Secret Album</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;width:100%;background:#000;color:#fff;}
+
+  .viewport{
+    width:100vw;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    background:#000;
+    overflow-y: auto; 
+  }
+  
+  .stage{
+    width:1920px;
+    height: auto; 
+    min-height: 100vh;
+    position:relative;
+    background: #000;
+    border-left:6px solid #111;
+    border-right:6px solid #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 40px; 
+    will-change: transform;
+    transform-origin: top center;
+  }
+
+  .album-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 80px;
+    margin-bottom: 60px;
+    color: #f6c6d6;
+    text-align: center;
+  }
+
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 60px; 
+    width: 100%;
+    max-width: 1600px; 
+    padding: 20px;
+  }
+
+  .photo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02); 
+    padding: 20px;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+  }
+
+  .photo-item:hover {
+    transform: translateY(-10px); 
+  }
+
+  .photo-frame {
+    width: 400px;
+    height: 400px;
+    border: 8px solid #222;
+    background: #111;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(255,255,255,0.05);
+    border-radius: 4px;
+  }
+
+  .photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .caption {
+    margin-top: 25px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 26px;
+    color: #ccc;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .back-btn {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    padding: 12px 24px;
+    background: #1dbf7a;
+    color: #fff;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 2000;
+    border: none;
+    box-shadow: 0 4px 15px rgba(29, 191, 122, 0.3);
+  }
+
+  .back-btn:hover {
+    background: #17a669;
+  }
+
+</style>
+</head>
+<body>
+  <div class="back-btn" onclick="window.location.href='index.html'">BACK</div>
+
+  <audio id="albumMusic" src="assets/album_bgm.mp3" loop preload="auto"></audio>
+
+  <div class="viewport">
+    <div class="stage" id="stage">
+
+      <h1 class="album-title">Keepsakes</h1>
+
+      <div class="photo-grid">
+
+        <div class="photo-item">
+          <div class="photo-frame">
+            <img src="assets/pic1.jpeg" alt="56">
+          </div>
+          <div class="caption">at 56th</div>
+        </div>
+
+        <div class="photo-item">
+          <div class="photo-frame">
+            <img src="assets/pic2.jpeg" alt="Billiard">
+          </div>
+          <div class="caption">Bruh...</div>
+        </div>
+
+        <div class="photo-item">
+          <div class="photo-frame">
+            <img src="assets/pic3.jpg" alt="Peony">
+          </div>
+          <div class="caption">Peonies for Peony</div>
+        </div>
+        <!--
+        <div class="photo-item">
+          <div class="photo-frame">
+            <img src="assets/album4.jpg" alt="Photo 4">
+          </div>
+          <div class="caption"></div>
+        </div>
+
+        <div class="photo-item">
+          <div class="photo-frame">
+            <img src="assets/album5.jpg" alt="Photo 5">
+          </div>
+          <div class="caption"></div>
+        </div>
+
+        <div class="photo-item">
+          <div class="photo-frame">
+            <img src="assets/album6.jpg" alt="Photo 6">
+          </div>
+          <div class="caption"></div>
+        </div>
+        -->
+      </div> </div>
+  </div>
+
+<script>
+window.addEventListener('DOMContentLoaded', ()=>{
+  const stage = document.getElementById('stage');
+  const music = document.getElementById('albumMusic');
+
+  music.volume = 0.3;
+
+  // Resolution Scaling logic
+  function fitStage(){
+    const viewportW = window.innerWidth;
+    const scale = viewportW / 1920;
+    
+    if (viewportW < 1920) {
+        stage.style.transform = `scale(${scale})`;
+    } else {
+        stage.style.transform = `scale(1)`;
+    }
+  }
+  
+  window.addEventListener('resize', fitStage);
+  fitStage();
+
+  const startMusic = () => {
+    music.play().catch(() => {
+      console.log("Waiting for interaction to play music...");
+    });
+  };
+
+  startMusic();
+  window.addEventListener('click', startMusic, { once: true });
+  window.addEventListener('scroll', startMusic, { once: true });
+});
+</script>
+</body>
+</html>

@@ -159,12 +159,33 @@
     font-family: 'Press Start 2P', monospace;
     font-size: 16px;
     cursor: pointer;
-    transition: opacity 1s ease;
+    transition: opacity 1 ease;
     pointer-events: auto;
   }
   #roadmapBtn.visible {
     opacity: 1;
     animation: pulse-center 1s infinite; 
+  }
+
+  .secret-arrow {
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 80px;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    z-index: 1500;
+    user-select: none;
+    animation: arrow-bounce-slide 1.5s infinite ease-in-out;
+    transition: color 0.3s;
+  }
+  .secret-arrow:hover { color: #fff; }
+
+  @keyframes arrow-bounce-slide {
+    0% { transform: translateY(-50%) translateX(0) scale(1); }
+    50% { transform: translateY(-50%) translateX(15px) scale(1.1); }
+    100% { transform: translateY(-50%) translateX(0) scale(1); }
   }
 
 </style>
@@ -177,6 +198,8 @@
         <div class="title">Will you join me at the legendary 56th?</div>
         <div class="tagline" id="tagline">No, No, Please Stop!</div>
       </div>
+
+      <div class="secret-arrow" id="secretArrow">➜</div>
 
       <div class="peonyScene" id="peonyScene">
         <img src="assets/peony.gif" id="peonyGif" alt="peony">
@@ -195,7 +218,6 @@
 
       <div class="noteOverlay" id="noteOverlay">
         <div class="lyric-container" id="lyricContainer"></div>
-        
         <div class="note" id="noteBox">
           <div class="text">
         Dear Ocin, I like your decision.
@@ -207,30 +229,24 @@
 
         I’ll take care of the rest.
           </div>
-
           <div class="media-col">
             <div class="photo">
               <img src="assets/photo.jpg" alt="photo">
             </div>
             <img src="assets/boba.gif" alt="bubble tea" class="boba-gif">
           </div>
-          
           <img src="assets/dog.gif" alt="dog" class="dog-gif">
         </div>
-
         <div id="roadmapBtn">SHOW ROADMAP</div>
       </div>
 
       <audio id="noteMusic" src="assets/music.mp3" preload="auto"></audio>
-
     </div>
   </div>
 
 <script>
 window.addEventListener('DOMContentLoaded', ()=>{
-
   const stage = document.getElementById('stage');
-
   function fitStage(){
     const viewportW = window.innerWidth;
     const viewportH = window.innerHeight;
@@ -238,10 +254,19 @@ window.addEventListener('DOMContentLoaded', ()=>{
     stage.style.transform = `scale(${scale})`;
     stage.style.transformOrigin = 'center center';
   }
-  
   window.addEventListener('resize', fitStage);
   window.addEventListener('load', fitStage);
   fitStage();
+
+  const secretArrow = document.getElementById('secretArrow');
+  secretArrow.addEventListener('click', () => {
+    const pw = prompt("Enter Secret Access Code:");
+    if (pw === "007") {
+      window.location.href = "album.html";
+    } else {
+      alert("Access Denied.");
+    }
+  });
 
   const yesBtn = document.getElementById('yesBtn');
   const noBtn  = document.getElementById('noBtn');
@@ -257,11 +282,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
 
   let attempt = 0;
   let zigIndex = 0;
-
-  const zigzagPattern = [
-    { x: -600, y: -400 }, { x: -600, y: 100 },  
-    { x: 600,  y: -400 }, { x: 600,  y: 100 }, { x: 0, y: 0 }     
-  ];
+  const zigzagPattern = [{ x: -600, y: -400 }, { x: -600, y: 100 }, { x: 600, y: -400 }, { x: 600, y: 100 }, { x: 0, y: 0 }];
 
   noBtn.addEventListener('click', (ev) => {
     ev.preventDefault();
@@ -303,7 +324,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
     const scale = stage.getBoundingClientRect().width / 1920; 
     const baseLeft = (yesRect.left - stageRect.left) / scale + (yesRect.width / scale / 2);
     const baseTop  = (yesRect.top - stageRect.top) / scale + (yesRect.height / scale / 2);
-
     for(let i=0;i<15;i++){
       const s = document.createElement('div');
       s.className = 'spark';
@@ -335,25 +355,14 @@ window.addEventListener('DOMContentLoaded', ()=>{
   }
 
   function playLyricSequence() {
-    const lyrics = [
-      { text: "Constellations of stars", duration: 2000 },
-      { text: "Murals on city walls", duration: 2000 },
-      { text: "I don't see nobody but you", duration: 4000 },
-      { text: "You're my vice, you're my muse", duration: 2000 },
-      { text: "You're a nineteenth floor view", duration: 2000 },
-      { text: "I don't see nobody but you", duration: 4000 } 
-    ];
-
+    const lyrics = [{ text: "Constellations of stars", duration: 2000 }, { text: "Murals on city walls", duration: 2000 }, { text: "I don't see nobody but you", duration: 4000 }, { text: "You're my vice, you're my muse", duration: 2000 }, { text: "You're a nineteenth floor view", duration: 2000 }, { text: "I don't see nobody but you", duration: 4000 }];
     let currentLyric = 0;
-
     function showNextLyric() {
       if (currentLyric >= lyrics.length) return; 
-
       const lyricData = lyrics[currentLyric];
       const el = document.createElement('div');
       el.className = 'lyric-pop';
       el.innerText = lyricData.text;
-
       const isLeftSide = Math.random() > 0.5;
       if (isLeftSide) {
         const xPos = Math.floor(Math.random() * 100) + 50; 
@@ -373,7 +382,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
         el.style.transform = `scale(1) rotate(0deg)`;
         el.classList.add('show');
       }, 50);
-
       setTimeout(() => {
         el.style.opacity = "0";
         setTimeout(() => el.remove(), 500); 
@@ -390,7 +398,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
     playSparkles();
     peonyScene.style.display = 'flex';
     playPetals();
-
     setTimeout(()=>{
       peonyScene.style.display = 'none';
       noteOverlay.style.display = 'flex';
